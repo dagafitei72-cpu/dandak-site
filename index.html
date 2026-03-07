@@ -768,7 +768,7 @@ footer { background:var(--black); border-top:3px solid var(--red); padding:60px 
       </div>
     </div>
     <div class="about-visual reveal">
-      <div class="about-img"><div class="ph-ico">🏠</div><div class="ph-txt" data-fr="PHOTO À VENIR" data-nl="FOTO BINNENKORT" data-en="PHOTO COMING SOON">PHOTO À VENIR</div></div>
+      <div class="about-img"><img src="images/about-dandak.png" alt="DanDak Toitures Dakwerken" style="width:100%;height:100%;object-fit:cover;"></div>
       <div class="about-corner"></div>
     </div>
   </div>
@@ -917,15 +917,19 @@ footer { background:var(--black); border-top:3px solid var(--red); padding:60px 
       <div class="cinfo"><div class="cico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="cinfo-body"><strong>EMAIL</strong><a href="mailto:dandaksprl@gmail.com">dandaksprl@gmail.com</a></div></div>
       <div class="cinfo"><div class="cico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div class="cinfo-body"><strong>TVA / BTW</strong><p>BE 0722.925.459</p></div></div>
     </div>
-    <div class="form">
+    <form class="form" action="https://formsubmit.co/dandaksprl@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Nouveau devis DanDak">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://dagafitei72-cpu.github.io/dandak-site/#contact">
+      <input type="text" name="_honey" style="display:none">
       <div class="form-row">
-        <div class="fg"><label data-fr="NOM & PRÉNOM" data-nl="NAAM & VOORNAAM" data-en="FULL NAME">NOM & PRÉNOM</label><input type="text" placeholder="Jean Dupont"></div>
-        <div class="fg"><label data-fr="TÉLÉPHONE" data-nl="TELEFOON" data-en="PHONE">TÉLÉPHONE</label><input type="tel" placeholder="+32 xxx xx xx xx"></div>
+        <div class="fg"><label data-fr="NOM & PRÉNOM" data-nl="NAAM & VOORNAAM" data-en="FULL NAME">NOM & PRÉNOM</label><input type="text" name="nom" placeholder="Jean Dupont" required></div>
+        <div class="fg"><label data-fr="TÉLÉPHONE" data-nl="TELEFOON" data-en="PHONE">TÉLÉPHONE</label><input type="tel" name="telephone" placeholder="+32 xxx xx xx xx" required></div>
       </div>
-      <div class="fg"><label>EMAIL</label><input type="email" placeholder="votre@email.com"></div>
+      <div class="fg"><label>EMAIL</label><input type="email" name="email" placeholder="votre@email.com" required></div>
       <div class="fg">
         <label data-fr="TYPE DE SERVICE" data-nl="TYPE DIENST" data-en="SERVICE TYPE">TYPE DE SERVICE</label>
-        <select>
+        <select name="service">
           <option data-fr="-- Sélectionner --" data-nl="-- Selecteer --" data-en="-- Select --">-- Sélectionner --</option>
           <option data-fr="Toiture neuve" data-nl="Nieuw dak" data-en="New roof">Toiture neuve</option>
           <option data-fr="Rénovation" data-nl="Renovatie" data-en="Renovation">Rénovation</option>
@@ -939,9 +943,9 @@ footer { background:var(--black); border-top:3px solid var(--red); padding:60px 
           <option data-fr="Autre" data-nl="Andere" data-en="Other">Autre</option>
         </select>
       </div>
-      <div class="fg"><label data-fr="VOTRE MESSAGE" data-nl="UW BERICHT" data-en="YOUR MESSAGE">VOTRE MESSAGE</label><textarea data-fr-placeholder="Décrivez votre projet..." data-nl-placeholder="Beschrijf uw project..." data-en-placeholder="Describe your project..." placeholder="Décrivez votre projet..."></textarea></div>
-      <button class="btn-submit" data-fr="ENVOYER MA DEMANDE →" data-nl="STUUR MIJN AANVRAAG →" data-en="SEND MY REQUEST →">ENVOYER MA DEMANDE →</button>
-    </div>
+      <div class="fg"><label data-fr="VOTRE MESSAGE" data-nl="UW BERICHT" data-en="YOUR MESSAGE">VOTRE MESSAGE</label><textarea name="message" data-fr-placeholder="Décrivez votre projet..." data-nl-placeholder="Beschrijf uw project..." data-en-placeholder="Describe your project..." placeholder="Décrivez votre projet..." required></textarea></div>
+      <button type="submit" class="btn-submit" data-fr="ENVOYER MA DEMANDE →" data-nl="STUUR MIJN AANVRAAG →" data-en="SEND MY REQUEST →">ENVOYER MA DEMANDE →</button>
+    </form>
   </div>
 </section>
 
