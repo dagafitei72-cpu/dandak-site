@@ -1648,8 +1648,19 @@ window.addEventListener('load', () => {
 // ===== ROOF VISUALIZER (AUTOMATIC1111 INPAINT) =====
 (function() {
   var VISUALIZER_API = '/api/visualize';
-  var MAX_GENERATIONS = 999;
-  var sessionCount = parseInt(sessionStorage.getItem('vizCount') || '0');
+  var MAX_GENERATIONS = 5;
+  // Daily limit per user via localStorage
+  function getDailyCount() {
+    var data = JSON.parse(localStorage.getItem('vizDaily') || '{}');
+    var today = new Date().toISOString().slice(0, 10);
+    if (data.date !== today) return 0;
+    return data.count || 0;
+  }
+  function setDailyCount(count) {
+    var today = new Date().toISOString().slice(0, 10);
+    localStorage.setItem('vizDaily', JSON.stringify({ date: today, count: count }));
+  }
+  var sessionCount = getDailyCount();
 
   // DOM refs
   var modal = document.getElementById('viz-modal');
@@ -1756,9 +1767,9 @@ window.addEventListener('load', () => {
 
   function updateCounter() {
     var remaining = MAX_GENERATIONS - sessionCount;
-    counter.textContent = remaining + ' visualisation' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + ' pour cette session';
+    counter.textContent = remaining + ' visualisation' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + " pour aujourd'hui";
     if (remaining <= 0) {
-      counter.textContent = 'Limite atteinte. Rechargez la page pour recommencer.';
+      counter.textContent = 'Limite quotidienne atteinte (5/jour). Revenez demain ou contactez-nous pour un devis gratuit !';
       counter.style.color = '#c00';
     }
   }
@@ -1794,7 +1805,7 @@ window.addEventListener('load', () => {
       resultImg.src = data.image;
 
       sessionCount++;
-      sessionStorage.setItem('vizCount', sessionCount);
+      setDailyCount(sessionCount);
       updateCounter();
 
       loading.classList.remove('active');
@@ -1888,7 +1899,7 @@ window.addEventListener('load', () => {
       document.getElementById('viz-refine-text').value = '';
 
       sessionCount++;
-      sessionStorage.setItem('vizCount', sessionCount);
+      setDailyCount(sessionCount);
       updateCounter();
 
       loading.classList.remove('active');
