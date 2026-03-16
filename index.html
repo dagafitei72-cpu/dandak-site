@@ -1768,10 +1768,17 @@ window.addEventListener('load', () => {
   function updateCounter() {
     var remaining = MAX_GENERATIONS - sessionCount;
     counter.textContent = remaining + ' visualisation' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + " pour aujourd'hui";
+    counter.style.color = '#999';
+    counter.style.fontSize = '12px';
     if (remaining <= 0) {
-      counter.textContent = 'Limite quotidienne atteinte (5/jour). Revenez demain ou contactez-nous pour un devis gratuit !';
+      counter.innerHTML = '<strong style="font-size:14px">Limite quotidienne atteinte (5/jour)</strong><br>Revenez demain ou <a href="#contact" onclick="closeVisualizer()" style="color:var(--red);text-decoration:underline">contactez-nous</a> pour un devis gratuit !';
       counter.style.color = '#c00';
+      counter.style.fontSize = '14px';
+      genBtn.disabled = true;
+      genBtn.style.opacity = '0.4';
+      genBtn.style.cursor = 'not-allowed';
     }
+    checkReady();
   }
 
   // ---- Generate ----
