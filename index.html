@@ -1207,7 +1207,11 @@ window.addEventListener('load', () => {
   border-bottom-right-radius:4px;
   align-self:flex-end;
 }
-.chat-msg.typing { font-style:italic; color:#999; }
+.chat-msg.typing { display:flex; gap:5px; align-items:center; padding:14px 18px; }
+.chat-msg.typing .dot { width:8px; height:8px; background:#999; border-radius:50%; animation:chatBounce 1.4s infinite ease-in-out; }
+.chat-msg.typing .dot:nth-child(2) { animation-delay:0.2s; }
+.chat-msg.typing .dot:nth-child(3) { animation-delay:0.4s; }
+@keyframes chatBounce { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
 
 .chat-input-area {
   display:flex; padding:12px; gap:8px;
@@ -1798,7 +1802,7 @@ window.addEventListener('load', () => {
     // Show typing indicator
     var typing = document.createElement('div');
     typing.className = 'chat-msg bot typing';
-    typing.textContent = '...';
+    typing.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
     var msgArea = document.getElementById('chat-messages');
     msgArea.appendChild(typing);
     msgArea.scrollTop = msgArea.scrollHeight;
