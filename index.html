@@ -1647,7 +1647,7 @@ window.addEventListener('load', () => {
 
 // ===== ROOF VISUALIZER (AUTOMATIC1111 INPAINT) =====
 (function() {
-  var VISUALIZER_API = '/api/visualize';
+  var VISUALIZER_API = window.location.hostname.includes('vercel') ? '/api/visualize' : 'https://dandak-site.vercel.app/api/visualize';
   var MAX_GENERATIONS = 5;
   // Daily limit per user via localStorage
   function getDailyCount() {
