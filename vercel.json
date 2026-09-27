@@ -10,10 +10,6 @@
     }
   ],
   "functions": {
-    "api/visualize.js": {
-      "maxDuration": 120,
-      "memory": 1024
-    },
     "api/gallery.js": {
       "maxDuration": 30
     }
