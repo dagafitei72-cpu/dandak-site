@@ -84,7 +84,9 @@
         "nl": "TEST2",
         "en": "TEST1"
       },
-      "images": []
+      "images": [
+        "images/galerie/test/20260927161652-3bec3f.jpg"
+      ]
     }
   ]
 }
