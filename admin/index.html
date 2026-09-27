@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Galerie foto – DanDak</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #910508;
+  --red-dark: #6e0406;
+  --black: #111111;
+  --grey: #6b6b6b;
+  --line: #e2e2e2;
+  --lightgrey: #f4f4f4;
+  --white: #ffffff;
+  --green: #1d7a3a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--lightgrey); color: var(--black); min-height: 100vh; }
+button, input { font-family: inherit; font-size: 16px; }
+button { cursor: pointer; }
+.hidden { display: none !important; }
+
+/* Login */
+.login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.login-box { background: var(--white); width: 100%; max-width: 380px; padding: 32px 24px; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.brand { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; }
+.brand span { color: var(--red); }
+.login-box p { color: var(--grey); margin: 8px 0 20px; font-size: 14px; }
+.field { display: block; margin-bottom: 14px; }
+.field span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.field small { display: block; font-size: 12px; color: var(--grey); margin-top: 4px; }
+.field input { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); }
+.field input:focus { outline: 2px solid var(--red); border-color: transparent; }
+.error { color: var(--red); font-size: 14px; min-height: 20px; margin-bottom: 8px; }
+
+.btn { border: none; border-radius: 6px; padding: 12px 18px; font-weight: 600; background: var(--lightgrey); color: var(--black); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-primary { background: var(--red); color: var(--white); }
+.btn-primary:hover:not(:disabled) { background: var(--red-dark); }
+.btn-block { width: 100%; }
+.btn-small { padding: 8px 12px; font-size: 14px; }
+.btn-ghost { background: none; color: var(--grey); }
+
+/* App */
+header { background: var(--black); color: var(--white); padding: 14px 16px; position: sticky; top: 0; z-index: 10; }
+.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.header-inner .brand { font-size: 24px; flex: 1; }
+header a, header button { color: var(--white); background: none; border: 1px solid #444; border-radius: 6px; padding: 8px 12px; font-size: 14px; text-decoration: none; }
+main { max-width: 900px; margin: 0 auto; padding: 16px; }
+.info { background: var(--white); border-left: 4px solid var(--red); padding: 12px 14px; border-radius: 4px; font-size: 14px; color: var(--grey); margin-bottom: 16px; line-height: 1.5; }
+
+.project { background: var(--white); border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.project-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.project-title { flex: 1; min-width: 160px; }
+.project-title h2 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1.5px; line-height: 1.1; }
+.project-title .langs { font-size: 12px; color: var(--grey); margin-top: 2px; }
+.project-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.icon-btn { background: var(--lightgrey); border: none; border-radius: 6px; padding: 8px 10px; font-size: 14px; font-weight: 600; color: var(--black); }
+.icon-btn.danger { color: var(--red); }
+.icon-btn:disabled { opacity: 0.35; cursor: default; }
+
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.photo { position: relative; border-radius: 6px; overflow: hidden; background: var(--lightgrey); aspect-ratio: 4 / 3; }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo .badge { position: absolute; top: 6px; left: 6px; background: var(--red); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 3px 7px; border-radius: 4px; }
+.photo .actions { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 4px; padding: 6px; background: linear-gradient(transparent, rgba(0,0,0,0.65)); }
+.photo .actions button { flex: 1; border: none; border-radius: 4px; padding: 7px 4px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.92); color: var(--black); }
+.photo .actions button.danger { color: var(--red); }
+.empty { color: var(--grey); font-size: 14px; background: var(--lightgrey); border-radius: 6px; padding: 16px; text-align: center; margin-bottom: 12px; }
+.add-photos { display: block; width: 100%; border: 2px dashed #c9c9c9; border-radius: 6px; padding: 14px; text-align: center; font-weight: 600; color: var(--red); background: none; }
+.add-photos:hover { border-color: var(--red); background: #fff7f7; }
+.new-project { margin: 8px 0 40px; }
+
+/* Busy overlay, toast, dialog */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.busy-box { background: var(--white); border-radius: 8px; padding: 24px; text-align: center; max-width: 320px; width: 100%; }
+.spinner { width: 36px; height: 36px; border: 4px solid var(--lightgrey); border-top-color: var(--red); border-radius: 50%; margin: 0 auto 14px; animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--black); color: var(--white); padding: 12px 18px; border-radius: 6px; font-size: 14px; z-index: 60; max-width: calc(100% - 32px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+.toast.ok { background: var(--green); }
+.toast.err { background: var(--red); }
+.dialog { background: var(--white); border-radius: 8px; padding: 22px; width: 100%; max-width: 420px; }
+.dialog h3 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1.5px; margin-bottom: 14px; }
+.dialog-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section class="login" id="login-view">
+  <form class="login-box" id="login-form">
+    <div class="brand">DAN<span>DAK</span> · GALERIE</div>
+    <p>Aici adaugi și ștergi pozele din galeria site-ului dandak.be.</p>
+    <label class="field">
+      <span>Parola</span>
+      <input type="password" id="password" autocomplete="current-password" required>
+    </label>
+    <div class="error" id="login-error"></div>
+    <button type="submit" class="btn btn-primary btn-block" id="login-btn">Intră</button>
+  </form>
+</section>
+
+<!-- APP -->
+<section id="app-view" class="hidden">
+  <header>
+    <div class="header-inner">
+      <div class="brand">DAN<span>DAK</span> · GALERIE</div>
+      <a href="https://dandak.be/#gallery" target="_blank" rel="noopener">Vezi site-ul</a>
+      <button type="button" id="logout-btn">Ieși</button>
+    </div>
+  </header>
+  <main>
+    <div class="info">
+      Prima poză din fiecare proiect e <strong>poza principală</strong> (cea care se vede în galerie).
+      Modificările apar pe site în <strong>1–5 minute</strong>.
+    </div>
+    <div id="projects"></div>
+    <button type="button" class="btn btn-primary btn-block new-project" id="new-project-btn">+ Proiect nou</button>
+  </main>
+</section>
+
+<input type="file" id="file-input" accept="image/*" multiple class="hidden">
+
+<div class="overlay hidden" id="busy">
+  <div class="busy-box">
+    <div class="spinner"></div>
+    <div id="busy-text">Se salvează…</div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="dialog">
+  <form class="dialog" id="dialog-form">
+    <h3 id="dialog-title">Proiect nou</h3>
+    <label class="field">
+      <span>Titlu în franceză *</span>
+      <input type="text" id="title-fr" maxlength="60" required placeholder="ex. TOITURE EN ARDOISE">
+    </label>
+    <label class="field">
+      <span>Titlu în olandeză</span>
+      <input type="text" id="title-nl" maxlength="60" placeholder="ex. LEIEN DAK">
+    </label>
+    <label class="field">
+      <span>Titlu în engleză</span>
+      <input type="text" id="title-en" maxlength="60" placeholder="ex. SLATE ROOF">
+      <small>Dacă lași olandeza sau engleza goale, se folosește titlul în franceză.</small>
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="dialog-cancel">Renunță</button>
+      <button type="submit" class="btn btn-primary">Salvează</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script>
+(function () {
+  var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var API = LOCAL || /vercel\.app$/.test(location.hostname)
+    ? '/api/gallery'
+    : 'https://dandak-site.vercel.app/api/gallery';
+  // Pozele se afiseaza direct din GitHub, ca cele abia adaugate sa se vada imediat,
+  // inainte ca site-ul sa fie republicat.
+  var RAW = LOCAL ? '/' : 'https://raw.githubusercontent.com/dagafitei72-cpu/dandak-site/main/';
+  var PW_KEY = 'dandak-galerie-parola';
+  var MAX_SIDE = 1600;
+
+  var password = '';
+  var gallery = { projects: [] };
+  var uploadTarget = null;
+  var dialogSubmit = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // 1 poză, 2 poze, 20 de poze
+  function photos(n) {
+    if (n === 1) return '1 poză';
+    return n + (n % 100 >= 20 || (n > 0 && n % 100 === 0) ? ' de poze' : ' poze');
+  }
+
+  function storage(action, value) {
+    try {
+      if (action === 'get') return localStorage.getItem(PW_KEY) || '';
+      if (action === 'set') localStorage.setItem(PW_KEY, value);
+      if (action === 'clear') localStorage.removeItem(PW_KEY);
+    } catch (e) { /* browser fara localStorage: parola se cere la fiecare vizita */ }
+    return '';
+  }
+
+  // ------------------------------------------------------------------ UI helpers
+  var toastTimer;
+  function toast(text, kind) {
+    var el = $('toast');
+    el.textContent = text;
+    el.className = 'toast ' + (kind || '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.className = 'toast hidden'; }, kind === 'err' ? 6000 : 3500);
+  }
+
+  function busy(text) {
+    if (text) { $('busy-text').textContent = text; $('busy').classList.remove('hidden'); }
+    else $('busy').classList.add('hidden');
+  }
+
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') node.textContent = attrs[k];
+      else if (k === 'onclick') node.addEventListener('click', attrs[k]);
+      else if (k === 'disabled') node.disabled = attrs[k];
+      else node.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) node.appendChild(c); });
+    return node;
+  }
+
+  // ------------------------------------------------------------------ API
+  function api(action, data) {
+    var body = Object.assign({ password: password, action: action }, data || {});
+    return fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (json) {
+        if (res.status === 401) { logout(); throw new Error('Parolă greșită.'); }
+        if (!res.ok) throw new Error(json.error || ('Eroare ' + res.status));
+        if (json.gallery) { gallery = json.gallery; render(); }
+        return json;
+      });
+    }, function () {
+      throw new Error('Nu e conexiune la internet sau serverul nu răspunde.');
+    });
+  }
+
+  function run(text, action, data, doneText) {
+    busy(text);
+    return api(action, data)
+      .then(function () { busy(); if (doneText) toast(doneText, 'ok'); })
+      .catch(function (e) { busy(); toast(e.message, 'err'); });
+  }
+
+  // ------------------------------------------------------------------ Login
+  function login(pw) {
+    password = pw;
+    $('login-btn').disabled = true;
+    $('login-error').textContent = '';
+    return api('list').then(function () {
+      storage('set', pw);
+      $('login-view').classList.add('hidden');
+      $('app-view').classList.remove('hidden');
+    }).catch(function (e) {
+      $('login-error').textContent = e.message;
+    }).then(function () { $('login-btn').disabled = false; });
+  }
+
+  function logout() {
+    password = '';
+    storage('clear');
+    $('password').value = '';
+    $('app-view').classList.add('hidden');
+    $('login-view').classList.remove('hidden');
+  }
+
+  $('login-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    login($('password').value);
+  });
+  $('logout-btn').addEventListener('click', logout);
+
+  // ------------------------------------------------------------------ Render
+  function render() {
+    var list = $('projects');
+    list.innerHTML = '';
+    var projects = gallery.projects || [];
+    if (!projects.length) {
+      list.appendChild(el('div', { class: 'empty', text: 'Nu există niciun proiect. Apasă „+ Proiect nou”.' }));
+    }
+    projects.forEach(function (p, index) {
+      var photoGrid = el('div', { class: 'photos' });
+      p.images.forEach(function (path, i) {
+        photoGrid.appendChild(el('div', { class: 'photo' }, [
+          el('img', { src: RAW + path, alt: '', loading: 'lazy' }),
+          i === 0 ? el('span', { class: 'badge', text: 'PRINCIPALĂ' }) : null,
+          el('div', { class: 'actions' }, [
+            i > 0 ? el('button', { type: 'button', text: '★ Principală', onclick: function () { setCover(p, path); } }) : null,
+            el('button', { type: 'button', class: 'danger', text: '🗑 Șterge', onclick: function () { deleteImage(p, path); } })
+          ])
+        ]));
+      });
+
+      list.appendChild(el('article', { class: 'project' }, [
+        el('div', { class: 'project-head' }, [
+          el('div', { class: 'project-title' }, [
+            el('h2', { text: p.title.fr }),
+            el('div', { class: 'langs', text: 'NL: ' + p.title.nl + ' · EN: ' + p.title.en + ' · ' + photos(p.images.length) })
+          ]),
+          el('div', { class: 'project-tools' }, [
+            el('button', { type: 'button', class: 'icon-btn', title: 'Mută mai sus', text: '↑', disabled: index === 0, onclick: function () { moveProject(p, 'up'); } }),
+            el('button', { type: 'button', class: 'icon-btn', title: 'Mută mai jos', text: '↓', disabled: index === projects.length - 1, onclick: function () { moveProject(p, 'down'); } }),
+            el('button', { type: 'button', class: 'icon-btn', text: '✏️ Redenumește', onclick: function () { renameProject(p); } }),
+            el('button', { type: 'button', class: 'icon-btn danger', text: '🗑 Șterge proiectul', onclick: function () { deleteProject(p); } })
+          ])
+        ]),
+        p.images.length ? photoGrid : el('div', { class: 'empty', text: 'Nicio poză încă. Proiectul nu apare pe site până nu adaugi poze.' }),
+        el('button', { type: 'button', class: 'add-photos', text: '+ Adaugă poze', onclick: function () { pickPhotos(p); } })
+      ]));
+    });
+  }
+
+  // ------------------------------------------------------------------ Actions
+  function setCover(p, path) {
+    run('Se salvează…', 'set-cover', { projectId: p.id, path: path }, 'Poza principală a fost schimbată.');
+  }
+
+  function deleteImage(p, path) {
+    if (!confirm('Ștergi poza din „' + p.title.fr + '”?')) return;
+    run('Se șterge poza…', 'delete-image', { projectId: p.id, path: path }, 'Poza a fost ștearsă.');
+  }
+
+  function moveProject(p, direction) {
+    run('Se mută proiectul…', 'move-project', { projectId: p.id, direction: direction }, 'Ordinea a fost salvată.');
+  }
+
+  function deleteProject(p) {
+    var n = p.images.length;
+    var msg = 'Ștergi TOT proiectul „' + p.title.fr + '”' +
+      (n === 1 ? ' și poza lui' : n > 1 ? ' și toate cele ' + photos(n) + ' ale lui' : '') + '?';
+    if (!confirm(msg)) return;
+    run('Se șterge proiectul…', 'delete-project', { projectId: p.id }, 'Proiectul a fost șters.');
+  }
+
+  function openDialog(title, values, onSubmit) {
+    $('dialog-title').textContent = title;
+    $('title-fr').value = values.fr || '';
+    $('title-nl').value = values.nl || '';
+    $('title-en').value = values.en || '';
+    dialogSubmit = onSubmit;
+    $('dialog').classList.remove('hidden');
+    setTimeout(function () { $('title-fr').focus(); }, 50);
+  }
+
+  function closeDialog() { $('dialog').classList.add('hidden'); dialogSubmit = null; }
+
+  $('dialog-cancel').addEventListener('click', closeDialog);
+  $('dialog-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var title = { fr: $('title-fr').value, nl: $('title-nl').value, en: $('title-en').value };
+    var submit = dialogSubmit;
+    closeDialog();
+    if (submit) submit(title);
+  });
+
+  $('new-project-btn').addEventListener('click', function () {
+    openDialog('Proiect nou', {}, function (title) {
+      run('Se creează proiectul…', 'create-project', { title: title }, 'Proiect creat. Acum adaugă poze în el.');
+    });
+  });
+
+  function renameProject(p) {
+    openDialog('Redenumește proiectul', p.title, function (title) {
+      run('Se salvează…', 'rename-project', { projectId: p.id, title: title }, 'Titlul a fost schimbat.');
+    });
+  }
+
+  // ------------------------------------------------------------------ Upload
+  function pickPhotos(p) {
+    uploadTarget = p;
+    $('file-input').value = '';
+    $('file-input').click();
+  }
+
+  $('file-input').addEventListener('change', function () {
+    var files = Array.prototype.slice.call(this.files || []);
+    if (files.length && uploadTarget) uploadAll(uploadTarget, files);
+  });
+
+  function loadImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('format')); };
+      img.src = url;
+    });
+  }
+
+  // Micsoreaza poza la maxim 1600px si o transforma in JPG, ca site-ul sa ramana rapid.
+  function toJpeg(file) {
+    return loadImage(file).then(function (img) {
+      var scale = Math.min(1, MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+      var w = Math.round(img.naturalWidth * scale);
+      var h = Math.round(img.naturalHeight * scale);
+      var canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      var qualities = [0.82, 0.7, 0.55];
+      for (var i = 0; i < qualities.length; i++) {
+        var data = canvas.toDataURL('image/jpeg', qualities[i]);
+        if (data.length < 3500000) return data;
+      }
+      throw new Error('prea mare');
+    });
+  }
+
+  function uploadAll(p, files) {
+    var ok = 0;
+    var failed = [];
+    var chain = Promise.resolve();
+    files.forEach(function (file, i) {
+      chain = chain.then(function () {
+        busy('Se încarcă poza ' + (i + 1) + ' din ' + files.length + '…');
+        return toJpeg(file)
+          .then(function (image) { return api('upload', { projectId: p.id, image: image }); })
+          .then(function () { ok++; })
+          .catch(function (e) {
+            failed.push(file.name + (e.message === 'format' ? ' (format nesuportat, folosește JPG sau PNG)' : ' (' + e.message + ')'));
+          });
+      });
+    });
+    chain.then(function () {
+      busy();
+      if (!failed.length) toast(ok === 1 ? 'Poza a fost adăugată.' : 'Au fost adăugate ' + photos(ok) + '.', 'ok');
+      else toast((ok ? 'Adăugate: ' + photos(ok) + '. ' : '') + 'Nu s-au putut adăuga: ' + failed.join(', '), 'err');
+    });
+  }
+
+  // ------------------------------------------------------------------ Start
+  var saved = storage('get');
+  if (saved) login(saved);
+  else $('password').focus();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "toiture-neuve",
+      "title": { "fr": "TOITURE NEUVE", "nl": "NIEUW DAK", "en": "NEW ROOF" },
+      "images": ["images/toiture-1.jpg", "images/toiture-2.jpg", "images/toiture-3.jpg", "images/toiture-4.jpg"]
+    },
+    {
+      "id": "renovation",
+      "title": { "fr": "RÉNOVATION", "nl": "RENOVATIE", "en": "RENOVATION" },
+      "images": ["images/renovation-1.jpg", "images/renovation-2.jpg"]
+    },
+    {
+      "id": "plateformes",
+      "title": { "fr": "PLATEFORMES", "nl": "PLATFORMEN", "en": "FLAT ROOFS" },
+      "images": ["images/etancheite-1.jpg", "images/etancheite-2.jpg", "images/etancheite-3.jpg", "images/etancheite-4.jpg"]
+    },
+    {
+      "id": "velux",
+      "title": { "fr": "VELUX", "nl": "VELUX", "en": "VELUX" },
+      "images": ["images/velux-1.jpg", "images/velux-2.jpg"]
+    },
+    {
+      "id": "lucarnes",
+      "title": { "fr": "LUCARNES", "nl": "DAKKAPELLEN", "en": "DORMERS" },
+      "images": ["images/lucarne-1.jpg", "images/lucarne-2.jpg"]
+    },
+    {
+      "id": "zinguerie",
+      "title": { "fr": "ZINGUERIE", "nl": "ZINKENWERK", "en": "ZINC WORK" },
+      "images": ["images/zinguerie-1.jpg", "images/zinguerie-2.jpg"]
+    }
+  ]
+}

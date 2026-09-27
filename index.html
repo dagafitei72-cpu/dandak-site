@@ -305,7 +305,7 @@ nav.scrolled { box-shadow:0 2px 30px rgba(0,0,0,0.08); }
 .gallery { background:var(--white); }
 .gallery-grid {
   display:grid;
-  grid-template-columns:repeat(12,1fr); grid-template-rows:240px 240px;
+  grid-template-columns:repeat(12,1fr); grid-auto-rows:240px;
   gap:4px; max-width:1200px; margin:0 auto;
 }
 .gitem {
@@ -322,12 +322,6 @@ nav.scrolled { box-shadow:0 2px 30px rgba(0,0,0,0.08); }
 }
 .gitem:hover .gitem-overlay { opacity:1; }
 .gitem-overlay p { font-size:11px; letter-spacing:3px; font-weight:700; text-transform:uppercase; }
-.g1 { grid-column:span 5; }
-.g2 { grid-column:span 4; }
-.g3 { grid-column:span 3; }
-.g4 { grid-column:span 3; }
-.g5 { grid-column:span 5; }
-.g6 { grid-column:span 4; }
 .gph { font-size:40px; opacity:0.15; }
 .glbl { font-size:10px; color:var(--grey); letter-spacing:2px; }
 
@@ -490,8 +484,8 @@ footer { background:var(--black); border-top:3px solid var(--red); padding:60px 
   .test-grid { grid-template-columns:1fr; }
   .why-grid { grid-template-columns:1fr 1fr; }
   .footer-grid { grid-template-columns:1fr; gap:36px; }
-  .gallery-grid { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
-  .g1,.g2,.g3,.g4,.g5,.g6 { grid-column:span 1; height:200px; }
+  .gallery-grid { grid-template-columns:1fr 1fr; grid-auto-rows:auto; }
+  .gallery-grid .gitem { grid-column:span 1 !important; height:200px; }
   .why { padding:60px 30px; }
   footer { padding:50px 30px 24px; }
 }
@@ -803,26 +797,8 @@ footer { background:var(--black); border-top:3px solid var(--red); padding:60px 
     <h2 class="sec-title" data-fr="GALERIE <span>PHOTOS</span>" data-nl="FOTO <span>GALERIE</span>" data-en="PHOTO <span>GALLERY</span>">GALERIE <span>PHOTOS</span></h2>
     <div class="sec-line" style="margin:0 auto 50px"></div>
   </div>
-  <div class="gallery-grid reveal">
-    <div class="gitem g1" data-title="TOITURE NEUVE" data-images="images/toiture-1.jpg,images/toiture-2.jpg,images/toiture-3.jpg,images/toiture-4.jpg" style="background-image:url('images/toiture-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-    <div class="gitem g2" data-title="RÉNOVATION" data-images="images/renovation-1.jpg,images/renovation-2.jpg" style="background-image:url('images/renovation-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-    <div class="gitem g3" data-title="PLATEFORMES" data-images="images/etancheite-1.jpg,images/etancheite-2.jpg,images/etancheite-3.jpg,images/etancheite-4.jpg" style="background-image:url('images/etancheite-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-    <div class="gitem g4" data-title="VELUX" data-images="images/velux-1.jpg,images/velux-2.jpg" style="background-image:url('images/velux-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-    <div class="gitem g5" data-title="LUCARNES" data-images="images/lucarne-1.jpg,images/lucarne-2.jpg" style="background-image:url('images/lucarne-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-    <div class="gitem g6" data-title="ZINGUERIE" data-images="images/zinguerie-1.jpg,images/zinguerie-2.jpg" style="background-image:url('images/zinguerie-1.jpg');background-size:cover;background-position:center;">
-      <div class="gitem-overlay"><p data-fr="VOIR LE PROJET" data-nl="PROJECT BEKIJKEN" data-en="VIEW PROJECT">VOIR LE PROJET</p></div>
-    </div>
-  </div>
+  <!-- Proiectele si pozele vin din gallery.json, administrat din /admin -->
+  <div class="gallery-grid reveal" id="gallery-grid"></div>
 </section>
 
 
@@ -1722,7 +1698,8 @@ window.addEventListener('load', () => {
     var imgs = el.getAttribute('data-images');
     if (!imgs) return;
     lbImages = imgs.split(',').map(function(s) { return s.trim(); });
-    lbTitle.textContent = el.getAttribute('data-title') || '';
+    var lang = typeof currentLang !== 'undefined' ? currentLang : 'fr';
+    lbTitle.textContent = el.getAttribute('data-title-' + lang) || el.getAttribute('data-title') || '';
 
     lbThumbs.innerHTML = '';
     lbImages.forEach(function(src, i) {
@@ -1763,10 +1740,47 @@ window.addEventListener('load', () => {
     if (e.key === 'ArrowRight') lightboxNav(1);
   });
 
-  // Attach click handlers to gallery items
-  document.querySelectorAll('.gitem[data-images]').forEach(function(item) {
-    item.addEventListener('click', function() { openLightbox(item); });
-  });
+  // Gallery tiles are built from gallery.json (edited from /admin).
+  // Rows of 3 tiles share the 12 grid columns; the pattern rotates so the grid does not look repetitive.
+  var ROW_SPANS = [[5, 4, 3], [3, 5, 4], [4, 3, 5]];
+
+  function tileSpans(count) {
+    var spans = [];
+    for (var r = 0; r < Math.floor(count / 3); r++) spans = spans.concat(ROW_SPANS[r % 3]);
+    if (count % 3 === 1) spans.push(12);
+    if (count % 3 === 2) spans.push(7, 5);
+    return spans;
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderGallery(gallery) {
+    var grid = document.getElementById('gallery-grid');
+    var lang = typeof currentLang !== 'undefined' ? currentLang : 'fr';
+    var view = { fr: 'VOIR LE PROJET', nl: 'PROJECT BEKIJKEN', en: 'VIEW PROJECT' };
+    var projects = (gallery.projects || []).filter(function(p) { return p.images && p.images.length; });
+    var spans = tileSpans(projects.length);
+    grid.innerHTML = projects.map(function(p, i) {
+      var t = p.title || {};
+      return '<div class="gitem" data-title="' + esc(t.fr || '') + '"' +
+        ' data-title-fr="' + esc(t.fr || '') + '" data-title-nl="' + esc(t.nl || t.fr || '') + '" data-title-en="' + esc(t.en || t.fr || '') + '"' +
+        ' data-images="' + esc(p.images.join(',')) + '"' +
+        ' style="grid-column:span ' + spans[i] + ';background-image:url(&quot;' + esc(p.images[0]) + '&quot;);background-size:cover;background-position:center;">' +
+        '<div class="gitem-overlay"><p data-fr="' + view.fr + '" data-nl="' + view.nl + '" data-en="' + view.en + '">' + view[lang] + '</p></div>' +
+        '</div>';
+    }).join('');
+    grid.querySelectorAll('.gitem').forEach(function(item) {
+      item.addEventListener('click', function() { openLightbox(item); });
+    });
+  }
+
+  fetch('gallery.json', { cache: 'no-cache' })
+    .then(function(r) { return r.json(); })
+    .then(renderGallery)
+    .catch(function(e) { console.error('Galerie:', e); });
 })();
 
 // ===== CHAT WIDGET =====
