@@ -76,17 +76,6 @@
         "images/zinguerie-1.jpg",
         "images/zinguerie-2.jpg"
       ]
-    },
-    {
-      "id": "test",
-      "title": {
-        "fr": "TEST",
-        "nl": "TEST2",
-        "en": "TEST1"
-      },
-      "images": [
-        "images/galerie/test/20260927161652-3bec3f.jpg"
-      ]
     }
   ]
 }
